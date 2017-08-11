@@ -7,7 +7,7 @@
   * @param: Fixtures
   * @returns: {Object} SongPlayer
   */
-  function SongPlayer(Fixtures) {
+  function SongPlayer($rootScope, Fixtures) {
 
     /*
     * @desc: creates empty Songplayer
@@ -40,6 +40,12 @@
       currentBuzzObject = new buzz.sound(song.audioUrl, {
         formats: ['mp3'],
         preload: true
+      });
+
+      currentBuzzObject.bind('timeupdate', function(){
+        $rootScope.$apply(function() {
+          SongPlayer.currentTime = currentBuzzObject.getTime();
+        });
       });
 
       SongPlayer.currentSong = song;
@@ -77,10 +83,16 @@
     /* Public*/
 
     /*
-    * @desc: current song from list of songs
+    * @desc: Current song from list of songs
     * @type {Object}
     */
     SongPlayer.currentSong = null;
+
+    /*
+    * @desc: Current playback time (in seconds) of current song
+    * @type {Object}
+    */
+    SongPlayer.currentTime = null;
 
     /*
     * @function: play
@@ -119,7 +131,7 @@
       var currentSongIndex = getSongIndex(SongPlayer.currentSong);
       currentSongIndex--;
 
-      if(currentSongIndex < 0) {
+      if (currentSongIndex < 0) {
         stopSong();
       } else {
         var song = currentAlbum.songs[currentSongIndex];
@@ -137,7 +149,7 @@
       var currentSongIndex = getSongIndex(SongPlayer.currentSong);
       currentSongIndex++;
 
-      if(currentSongIndex >= currentAlbum.songs.length) {
+      if (currentSongIndex >= currentAlbum.songs.length) {
         stopSong();
       } else {
         var song = currentAlbum.songs[currentSongIndex];
@@ -146,10 +158,21 @@
       }
     };
 
+    /*
+    * @function: setCurrentTime
+    * @desc: Sets the current time (in seconds) of the current playing song
+    * @param: {Number} time
+    */
+    SongPlayer.setCurrentTime = function(time) {
+      if (currentBuzzObject) {
+        currentBuzzObject.setTime(time);
+      }
+    };
+
     return SongPlayer;
   }
 
   angular
     .module('blocJams')
-    .factory('SongPlayer', ['Fixtures', SongPlayer]);
+    .factory('SongPlayer', ['$rootScope', 'Fixtures', SongPlayer]);
 })();
