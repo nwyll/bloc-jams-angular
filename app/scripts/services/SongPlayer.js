@@ -95,13 +95,8 @@
     SongPlayer.currentTime = null;
 
     /*
-<<<<<<< HEAD
-    * @desc: volume
-    * @type {Object}
-=======
     * @desc: Volume
     * @type {Number}
->>>>>>> checkpoint-11
     */
     SongPlayer.volume = 60;
 
@@ -183,11 +178,7 @@
     /*
     * @function: setVolume
     * @desc: Sets the volume
-<<<<<<< HEAD
     * @param: {Number} vol
-=======
-    * @param: {Number} volume
->>>>>>> checkpoint-11
     */
     SongPlayer.setVolume = function(vol) {
         currentBuzzObject.setVolume(vol);
